@@ -157,11 +157,22 @@ prepare_manifest() {
   requireCommands spiff bosh
   echo "Preparing to build the manifest... "
 
-  sed     -e "s/DIRECTOR-UUID/${directorUUID}/g"     -e "s/NAME/${releaseName}/g"     -e "s/STEMCELL/${stemcell}/g"     -e "s/ENVIRONMENT/${releaseName}-${ENVIRONMENT:-"dev"}/g"     "${templatesPath}/stub.yml" > "${tmpPath}/targeted-director-stub.yml"
+  sed \
+    -e "s/DIRECTOR-UUID/${directorUUID}/g"   \
+    -e "s/NAME/${releaseName}/g"     \
+    -e "s/STEMCELL/${stemcell}/g"\
+    -e "s/ENVIRONMENT/${releaseName}-${ENVIRONMENT:-"dev"}/g"   \
+    "${templatesPath}/stub.yml" \
+    > "${tmpPath}/targeted-director-stub.yml"
 
   echo "Merging templates using the spiff..."
 
-  spiff merge     "${templatesPath}/deployment.yml"     "${templatesPath}/jobs.yml"     "${templatesPath}/infrastructure/${infrastructure}.yml"     "${tmpPath}/targeted-director-stub.yml"     $* > "${manifestsPath}/${deploymentName}-manifest.yml"
+  spiff merge   \
+    "${templatesPath}/deployment.yml" \
+    "${templatesPath}/jobs.yml"    \
+    "${templatesPath}/infrastructure/${infrastructure}.yml"   \
+    "${tmpPath}/targeted-director-stub.yml"   \
+    > "${manifestsPath}/${deploymentName}-manifest.yml"
 
   rm "${tmpPath}/targeted-director-stub.yml"
 
